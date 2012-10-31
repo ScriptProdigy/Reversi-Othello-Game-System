@@ -148,8 +148,8 @@ class Gameboard():
         return pieces
         
     def emptyPieces(self):
-         return (self.size() * self.size()) - len(self.getPieces(self))
-        
+        """ Returns the amount of empty squares currently on the board """
+        return (self.size() * self.size()) - len(self.getPieces(self))
         
     def size(self):
         """ Returns the size of the board (AxA) """
