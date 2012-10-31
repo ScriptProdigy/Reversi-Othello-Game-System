@@ -21,9 +21,18 @@ class Reversi:
         self.ai = ReversiAI.AI()
         self.ai.setRules(self.rules)
         
+    def moveTiles(self, pos, player):
+        """ Returns what tiles will be swapped if a piece is commited to a player to a particular tile """
+        moves = []
+        moves.extend(self.rules.getHoriSwap(pos, player))
+        moves.extend(self.rules.getVertiSwap(pos, player))
+        moves.extend(self.rules.getDiagSwap(pos, player))
+        
+        return moves
+        
     def makeMove(self, pos, player):
         """ Makes the move for a player to a given tile """
-        for move in self.rules.moveTiles(pos, player):
+        for move in self.moveTiles(pos, player):
             self.gameboard.setPiece(move, player)
         
         self.gameboard.setPiece(pos, player)
@@ -71,3 +80,10 @@ class Reversi:
             return "Tied game"
         
         return self.gameboard.players[winner][0]
+        
+    def flushAi(self):
+        """ 'Flush' the AI object instance (for performance) """
+        player = self.ai.activePlayer
+        self.ai = ReversiAI.AI()
+        self.ai.setRules(self.rules)
+        self.ai.setActivePlayer(player)

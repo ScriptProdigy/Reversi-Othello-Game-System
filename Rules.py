@@ -161,12 +161,3 @@ class Rules:
                     moves.append(pos)
                     
         return moves
-
-    def moveTiles(self, pos, player):
-        """ Returns what tiles will be swapped if a piece is commited to a player to a particular tile """
-        moves = []
-        moves.extend(self.rules.getHoriSwap(pos, player))
-        moves.extend(self.rules.getVertiSwap(pos, player))
-        moves.extend(self.rules.getDiagSwap(pos, player))
-        
-        return moves

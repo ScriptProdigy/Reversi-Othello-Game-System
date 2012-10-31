@@ -1,5 +1,6 @@
 import re
 import math
+import sys
 import Reversi
 
 # Constants for white/black (for when we reference the tuple)
@@ -145,6 +146,10 @@ class Gameboard():
                     pieces.append([x,y, piece])
                     
         return pieces
+        
+    def emptyPieces(self):
+         return (self.size() * self.size()) - len(self.getPieces(self))
+        
         
     def size(self):
         """ Returns the size of the board (AxA) """

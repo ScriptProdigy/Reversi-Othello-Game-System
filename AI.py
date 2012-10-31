@@ -1,5 +1,7 @@
 import random
 import Gameboard
+import sys
+import Rules as ReversiRules
 
 """
 The AI class is the brains of the entire operation. It's essentially the agent
@@ -22,7 +24,7 @@ to the agent include:
 
 class AI:
     
-    def __init__(self, nodes=2):
+    def __init__(self, nodes=3):
         """ Initialises the class and sets the node depth """
         self.nodes = nodes
         
@@ -38,7 +40,8 @@ class AI:
         decision_tree = []
         self.minimax(tree, player, 1, decision_tree)
         
-        print decision_tree
+        # Return the first move
+        return decision_tree[0]
         
     def createTree(self, gameboard, player, tree, node=1):
         """ 
@@ -49,11 +52,15 @@ class AI:
         if self.reachedLeafNode(node):
             return
             
+        # Let's set the initial gameboard, and look for valid moves
+        gb_orig = Gameboard.Gameboard(gameboard)
+        rules = ReversiRules.Rules()
+        rules.setGameboard(gb_orig)
+                    
         # Let's iterate through all possible moves and add to our tree
-        for move in self.rules.validMoves(player):
+        for move in rules.validMoves(player):
             gb = Gameboard.Gameboard(gameboard)
             gb.setPiece(move, player)
-
             tree["moves"][move] = {
                 "gameboard" : gb, 
                 "moves" : {}
@@ -117,8 +124,17 @@ class AI:
                 corner positions is beneficial. 
         """
         
+        # Get the score differential
         score = gameboard.score(player) - gameboard.score(gameboard.opponent(player))
-        score += random.randint(-2, 2)
+        
+        # If we're in an endgame scenario, that's enough (we can afford to use a greedy evaluation function)
+        if gameboard.emptyPieces() <= self.nodes:
+            return score
+            
+        # Take in to account the mobility
+        rules = ReversiRules.Rules()
+        rules.setGameboard(gameboard)
+        score += len(rules.validMoves(player))
         
         return score
         
