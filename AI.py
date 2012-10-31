@@ -1,29 +1,49 @@
 import Gameboard
 
 """
+The AI class is the brains of the entire operation. It's essentially the agent
+(what this entire project is focused on).
 
+It uses a minimax algorithm (http://en.wikipedia.org/wiki/Minimax) to pick the 
+best suitable moves assuming optimal gameplay from both parties. Improvements
+to the agent include:
+    
+    - Implementation of an alpha-beta pruning algorithm to refine the minimax.
+    - Less reliance on OOP (degrades the performance). Creating so many parallel
+      objects blows out the execution time.
+    - Improve the evaluation function (I never really 'trained' it. Ideally I'd
+      like to write something that evaluates the effectiveness of multiple
+      evaluation functions against each other. That why, I could refine the 
+      algorithm.
+    - Database of opening moves.
+    
 """
 
 class AI:
+    
     def __init__(self, nodes=3):
+        """ Initialises the class and sets the node depth """
         self.nodes = nodes
         
     def run(self, gameboard, player):
+        """ Runs the AI algorithm. Calls the minimax algorithm and then prunes the tree based on scores """
         tree = {
             "gameboard" : gameboard,
             "moves" : {},
         }
-        self.minmax(gameboard, player, tree)
+        self.createTree(gameboard, player, tree)
         
-    def minmax(self, gameboard, player, tree, node=1):
+        # Let's now run through our tree and select the optimal path
+        self.minimax(tree, player)
+        
+    def createTree(self, gameboard, player, tree, node=1):
         """ 
-        The minimax algorithm creates a tree of gameboards which we can use to find
-        the optimal move to take.
+        This recursive createTree methods creates a tree of gameboards which we 
+        can later use to find the optimal move to take.
         """
         # If we've reached a leaf node, it's time to exit out
         if self.reachedLeafNode(node):
-            print "reached leaf node"
-            sys.exit(0)
+            return
             
         # Let's iterate through all possible moves and add to our tree
         for move in self.rules.validMoves(player):
@@ -34,11 +54,15 @@ class AI:
                 "gameboard" : gb, 
                 "moves" : {}
             }
+            
+            self.createTree(gb, gb.opponent(player), tree["moves"][move], node + 1)
         
-        print tree
-        
+    def minimax(self, tree, player):
+        """ Runs a minimax algorithm to select the best possible move """
+    
     def reachedLeafNode(self, node):
-        if node >= self.nodes:
+        """ Returns true if we've reached a leaf node """
+        if node > self.nodes:
             return True
             
         return False
@@ -65,13 +89,14 @@ class AI:
                 corner positions is beneficial. 
         """
         
-        print "test"
         score = gameboard.score(player) - gameboard.score(gameboard.opponent(player))
         
         return score
         
     def setActivePlayer(self, player):
+        """ Sets the active player (used in our minimax algorithm) """
         self.activePlayer = player
         
     def setRules(self, rules):
+        """ Set the rules class """
         self.rules = rules

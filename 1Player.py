@@ -12,4 +12,5 @@ reversi = Reversi.Reversi()
 player = Reversi.Gameboard.BLACK
 reversi.ai.setActivePlayer(player)
 
-print reversi.ai.run(reversi.gameboard, reversi.gameboard.opponent(player))
+# Run the AI session
+reversi.ai.run(reversi.gameboard, reversi.gameboard.opponent(player))
