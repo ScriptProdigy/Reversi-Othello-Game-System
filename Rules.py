@@ -13,14 +13,15 @@ TODO:
     more simplistic algorithm.
 """
 
+
 class Rules:
     
-    # Set the gameboard data value
     def setGameboard(self, gameboard):
+        """ Set the gameboard data value """
         self.gameboard = gameboard
         
-    # Returns a list of empty squares on the board
     def emptySquares(self):
+        """ Returns a list of empty squares on the board """
         empty = []
         
         for letter_ascii in range(Gameboard.LETTER_A, Gameboard.LETTER_H + 1):
@@ -32,15 +33,15 @@ class Rules:
                     
         return empty
         
-    # Whether or not a move is valid for a player
     def isValid(self, pos, player):
+        """ Whether or not a move is valid for a player """
         if pos not in self.emptySquares(): # Moving in to a square that isn't empty is illegal
             return False
             
         return self.validHorizontal(pos, player) == True or self.validVertical(pos, player) == True or self.validDiagonal(pos, player) == True
         
-    # Returns vertical tiles that can be swapped
     def getVertiSwap(self, pos, player):
+        """ Returns vertical tiles that can be swapped """
         if pos not in self.emptySquares():
             return []
 
@@ -59,21 +60,20 @@ class Rules:
     
         return tiles
         
-    # Whether any horizontal options would constitute a valid move
     def validHorizontal(self, pos, player):
+        """ Whether any horizontal options would constitute a valid move """
         return len(self.getHoriSwap(pos, player)) > 0
-        
-    # Whether any vertical options would constitute a valid move
+     
     def validVertical(self, pos, player):
+        """ Whether any vertical options would constitute a valid move """
         return len(self.getVertiSwap(pos, player)) > 0
         
-    # Whether any diagonal options would constitute a valid move
     def validDiagonal(self, pos, player):
+        """ Whether any diagonal options would constitute a valid move """
         return len(self.getDiagSwap(pos, player)) > 0
         
-    # Let's calculate the diagonal oordinates
     def getDiagSwap(self, pos, player):
-        # We've got to go in 2 directions
+        """ Let's calculate the diagonal oordinates """
         if pos not in self.emptySquares():
             return []
 
@@ -110,6 +110,7 @@ class Rules:
         return tiles
     
     def getHoriSwap(self, pos, player):
+        """ Calculates the horizontal coordinates """
         if pos not in self.emptySquares():
             return []
 
@@ -131,8 +132,8 @@ class Rules:
         
         return tiles
 
-    # Takes a list of piece positions and determines what pieces can be swapped
     def swappedTiles(self, squares, player):
+        """ Takes a list of piece positions and determines what pieces can be swapped """
         moves = []
         for square in squares:
             if self.gameboard.getPiece(square) == player:
@@ -149,8 +150,8 @@ class Rules:
             
         return moves
         
-    # Return a list of valid moves for a player
     def validMoves(self, player):
+        """ Return a list of valid moves for a player """
         moves = []
         for letter_ascii in range(Gameboard.LETTER_A, Gameboard.LETTER_H + 1):
             letter = chr(letter_ascii)
