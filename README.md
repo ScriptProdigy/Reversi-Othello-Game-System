@@ -11,13 +11,13 @@ import reversi.Reversi as Reversi
 reversi = Reversi.Reversi()
 ```
 
-You then need to configure the AI class (who it's playing as) with:
+You then need to configure the AI class (who it's playing against) with:
 
 ```python
 reversi.ai.setActivePlayer(Reversi.Gameboard.WHITE)
 ```
 
-Finally, to invoke the AI class you call its run() method, flush the AI class (clears up some memory) and then commit the returned move to the gameboard:
+Finally, to invoke the AI class you call its run() method, flush the AI object (clears up some memory) and then commit the returned move to the gameboard:
 
 ```python
 move = reversi.ai.run(reversi.gameboard, Reversi.Gameboard.WHITE)
