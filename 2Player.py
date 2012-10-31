@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import Reversi
+import reversi.Reversi as Reversi
 
 print "REVERSI AI ENGINE - 2 PLAYER MODE"
 print "By Alex Berriman 2012\n"

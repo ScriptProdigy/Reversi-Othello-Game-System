@@ -2,8 +2,7 @@
 
 import locale
 import resource
-import Reversi
-import AI as ReversiAI
+import reversi.Reversi as Reversi
 
 print "REVERSI AI ENGINE - 1 PLAYER MODE"
 print "By Alex Berriman 2012\n"
