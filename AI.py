@@ -1,3 +1,4 @@
+import random
 import Gameboard
 
 """
@@ -21,7 +22,7 @@ to the agent include:
 
 class AI:
     
-    def __init__(self, nodes=3):
+    def __init__(self, nodes=2):
         """ Initialises the class and sets the node depth """
         self.nodes = nodes
         
@@ -34,7 +35,10 @@ class AI:
         self.createTree(gameboard, player, tree)
         
         # Let's now run through our tree and select the optimal path
-        self.minimax(tree, player)
+        decision_tree = []
+        self.minimax(tree, player, 1, decision_tree)
+        
+        print decision_tree
         
     def createTree(self, gameboard, player, tree, node=1):
         """ 
@@ -57,8 +61,32 @@ class AI:
             
             self.createTree(gb, gb.opponent(player), tree["moves"][move], node + 1)
         
-    def minimax(self, tree, player):
+    def minimax(self, tree, player, level=1, history=[]):
         """ Runs a minimax algorithm to select the best possible move """
+        gb = tree['gameboard']
+        score = self.score(gb, player)
+
+        # Iterate through and find the min/max
+        for key, move in tree['moves'].items():
+            score = self.score(move['gameboard'], player)
+
+            try:
+                # Look for the maximum value
+                if level % 2 == 0 and score > limit:
+                    (limit, moves, lim_key) = (score, move, key)
+                # Look for the minimum value
+                elif level %2 != 0 and score < limit:
+                    (limit, moves, lim_key) = (score, move, key)
+             # Hasn't been initialised, let's just set it
+            except:
+                (limit, moves, lim_key) = (score, move, key)
+             
+        # Let's try to recursively call the method again
+        try:
+            history.append(lim_key)
+            self.minimax(moves, gb.opponent(player), level + 1, history)
+        except:
+            return
     
     def reachedLeafNode(self, node):
         """ Returns true if we've reached a leaf node """
@@ -90,6 +118,7 @@ class AI:
         """
         
         score = gameboard.score(player) - gameboard.score(gameboard.opponent(player))
+        score += random.randint(-2, 2)
         
         return score
         
