@@ -14,11 +14,19 @@ BOARD_SIZE = 8
     
 class Gameboard():
     
-    def __init__(self):
+    def __init__(self, gameboard=""):
         """ Object initialiser - let's set everything up """
         self.gameboard = self.createGameboard()
         self.players = self.players()
-        self.initGameboard()
+        
+        # If we've passed through a gameboard to copy from, let's do it
+        if gameboard != "":
+            for piece in self.getPieces(gameboard):
+                self.setPiece([piece[0], piece[1]], piece[2])
+                
+        # Otherwise, load the default pieces
+        else:
+            self.initGameboard()
         
     def createGameboard(self):
         """ Initialise the tuple which contains the gameboard data """
@@ -55,7 +63,10 @@ class Gameboard():
         return letter + str(ord)
 
     def setPiece(self, pos, piece):
-        """ Assign a piece to the board (if we pass through a string in the format '[A-Za-z]{1}[1-8]{1}' we convert to ordinals """
+        """ 
+        Assign a piece to the board (if we pass through a string in the format '[A-Za-z]{1}[1-8]{1}'
+        we convert to ordinals 
+        """
         if (isinstance(pos, str)):
             pos = self.getPos(pos)
         
@@ -123,6 +134,17 @@ class Gameboard():
                     score += 1
                     
         return score
+        
+    def getPieces(self, gameboard):
+        """ Retrieves all of the pieces of the gameboard """
+        pieces = []
+        for y in range(0, gameboard.size()):
+            for x in range(0, gameboard.size()):
+                piece = gameboard.getPiece([x, y])
+                if piece != 0:
+                    pieces.append([x,y, piece])
+                    
+        return pieces
         
     def size(self):
         """ Returns the size of the board (AxA) """

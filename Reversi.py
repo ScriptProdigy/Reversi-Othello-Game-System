@@ -2,6 +2,7 @@
 
 import Gameboard
 import Rules as ReversiRules
+import AI as ReversiAI
 
 """
 The Reversi controls some basic mechanisms over the game as a whole.
@@ -17,22 +18,15 @@ class Reversi:
         self.gameboard = Gameboard.Gameboard()
         self.rules = ReversiRules.Rules()
         self.rules.setGameboard(self.gameboard)
+        self.ai = ReversiAI.AI()
+        self.ai.setRules(self.rules)
         
     def makeMove(self, pos, player):
         """ Makes the move for a player to a given tile """
-        for move in self.moveTiles(pos, player):
+        for move in self.rules.moveTiles(pos, player):
             self.gameboard.setPiece(move, player)
         
         self.gameboard.setPiece(pos, player)
-        
-    def moveTiles(self, pos, player):
-        """ Returns what tiles will be swapped if a piece is commited to a player to a particular tile """
-        moves = []
-        moves.extend(self.rules.getHoriSwap(pos, player))
-        moves.extend(self.rules.getVertiSwap(pos, player))
-        moves.extend(self.rules.getDiagSwap(pos, player))
-        
-        return moves
 
     def gameover(self):
         """ Returns true if the game is over (no more moves), false if not """
